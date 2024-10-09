@@ -17,36 +17,46 @@ class _FeedPageState extends State<FeedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feedbacks'),
+        title: const Text(
+          'Feedbacks',
+          style: TextStyle(
+            color: Colors.white, 
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.red,
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('Feedbacks').snapshots(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
-          } else {
+          } else if (snapshot.hasData) {
             return ListView.separated(
-              separatorBuilder: (context, index) => Divider(),
+              separatorBuilder: (context, index) => const Divider(),
               itemCount: snapshot.data.docs.length,
               itemBuilder: (context, index) {
+                var feedback = snapshot.data.docs[index];
                 return ListTile(
                   leading: CircleAvatar(),
-                  title: Text(snapshot.data.docs[index]['username']),
-                  subtitle: Text(
-                      snapshot.data.docs[index]['message']),
-                  // trailing: Text(snapshot.data.docs[index]['created_at'].toString()),
+                  title: Text(feedback['username']),
+                  subtitle: Text(feedback['message']),
                 );
               },
+            );
+          } else {
+            return const Center(
+              child: Text("Nenhum feedback encontrado."),
             );
           }
         },
       ),
       bottomNavigationBar: BottomAppBar(
-        elevation: 30,
-        color: const Color.fromARGB(255, 242, 238, 238),
+        elevation: 10,
+        color: const Color(0xFFF2EEEE),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -56,29 +66,34 @@ class _FeedPageState extends State<FeedPage> {
                   controller: messageController,
                   maxLines: 5,
                   keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.white),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: 'Digite seu feedback',
+                  ),
                 ),
               ),
+              const SizedBox(width: 10),
               SizedBox(
-                width: 10,
-              ),
-              Container(
                 height: 50,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                   onPressed: () async {
                     try {
-                      var message = await FirestoreService()
-                          .postFeedback(messageController.text);
-
+                      // Enviar feedback
+                      await FirestoreService().postFeedback(messageController.text);
                       messageController.clear();
                     } catch (e) {
                       print(e);
                     }
                   },
-                  child: Icon(Icons.send),
+                  child: const Icon(Icons.send, color: Colors.white),
                 ),
               )
             ],
@@ -88,18 +103,3 @@ class _FeedPageState extends State<FeedPage> {
     );
   }
 }
-
-
-// ListView.separated(
-//         separatorBuilder: (context, index) => Divider(),
-//         itemCount: 20,
-//         itemBuilder: (context, index) {
-//           return ListTile(
-//             leading: CircleAvatar(),
-//             title: Text('Nome'),
-//             subtitle: Text(
-//                 'Comentariooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo'),
-//             trailing: Text('02/10/24'),
-//           );
-//         },
-//       ),

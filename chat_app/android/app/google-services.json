@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "513295811246",
+    "project_id": "provamobile2-4644d",
+    "storage_bucket": "provamobile2-4644d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513295811246:android:e7725919850a7e6fe8a33f",
+        "android_client_info": {
+          "package_name": "com.provamobile2.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkME66lc1cu2Ml4NhaRC22KId0-qnzSrU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

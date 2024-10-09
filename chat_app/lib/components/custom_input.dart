@@ -15,7 +15,7 @@ class CustomInput extends StatelessWidget {
         controller: controller,
         obscureText: isObscure,
         decoration: InputDecoration(
-            border: const OutlineInputBorder(), hintText: labelText),
+            border: const OutlineInputBorder(), hintText: labelText, fillColor: Colors.grey),
       ),
     );
   }
